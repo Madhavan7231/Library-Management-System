@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>📚 Book Catalog 📚</h2>
+
+<form class="row g-3 mb-3" method="get" action="{{ url_for('dashboard') }}">
+  <div class="col-auto">
+    <input type="text" class="form-control" name="q" placeholder="Search by title or author" value="{{ search_query }}">
+  </div>
+  <div class="col-auto">
+    <button type="submit" class="btn btn-primary mb-3">🔍 Search</button>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-3">Clear</a>
+  </div>
+</form>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>📖 Title</th>
+      <th>✍ Author</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for book in books %}
+    <tr>
+      <td>{{ book.title }}</td>
+      <td>{{ book.author }}</td>
+      <td>
+        <span class="badge bg-{{ 'success' if book.available == 1 else 'danger' }}">
+          {{ 'Available' if book.available == 1 else 'Borrowed' }}
+        </span>
+      </td>
+      <td>
+        <form method="post" action="{{ url_for('borrow_return') }}">
+          <input type="hidden" name="book_id" value="{{ book.id }}" />
+          {% if book.available == 1 %}
+            <input type="text" name="borrower_name" class="form-control mb-1" placeholder="Your Name" required />
+            <input type="text" name="phone" class="form-control mb-1" placeholder="Phone Number" required />
+            <button class="btn btn-sm btn-primary" name="action" value="borrow">Borrow</button>
+          {% else %}
+            <button class="btn btn-sm btn-warning" name="action" value="return">Return</button>
+          {% endif %}
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4" class="text-center">No books found.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

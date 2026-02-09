@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Online Library System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body { background-color: #e3f2fd; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .main-content { background-color:blanchedalmond; padding: 2rem; border-radius: 15px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.15); }
+    .navbar-brand { font-weight: bold; font-size: 1.25rem; }
+    .btn-outline-light { border-color: white; }
+    h1, h2, h5 { color: #1e3d59; }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
+  <div class="container justify-content-between">
+    <span class="navbar-brand">📚 Modern Library System🌍</span>
+    {% if session.get('user_id') %}
+      <div class="dropdown">
+        <button class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown">☰ Menu</button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          {% if session.get('is_admin') %}<li><a class="dropdown-item" href="{{ url_for('admin_dashboard') }}">🛠 Admin</a></li>{% endif %}
+          <li><a class="dropdown-item" href="{{ url_for('history') }}">📜 History</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}">🚪 Logout</a></li>
+        </ul>
+      </div>
+    {% else %}
+      <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-sm">🔐 Login</a>
+    {% endif %}
+  </div>
+</nav>
+
+<div class="container my-4">
+  <div class="main-content">
+    <div class="text-center mb-4">
+      <h1 class="display-6">📖 Online Library Management System 📚</h1>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }} <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

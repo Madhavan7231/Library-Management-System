@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Admin Dashboard</h2>
+
+<a href="{{ url_for('dashboard') }}">
+  <button style="background-color: #4285f4; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin: 5px;">
+    🏠 Home
+  </button>
+</a>
+
+<div class="row">
+  {% set cards = [
+    {'title': 'Total Books', 'value': stats.total_books, 'color': 'primary'},
+    {'title': 'Available Books', 'value': stats.available_books, 'color': 'success'},
+    {'title': 'Total Users', 'value': stats.total_users, 'color': 'warning'},
+    {'title': 'Books Borrowed Today', 'value': stats.borrowed_today, 'color': 'danger'}
+  ] %}
+  {% for card in cards %}
+  <div class="col-md-3">
+    <div class="card text-white bg-{{ card.color }} mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ card.title }}</h5>
+        <p class="card-text fs-3">{{ card.value }}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<a href="{{ url_for('add_book') }}" class="btn btn-success">Add New Book</a>
+{% endblock %}

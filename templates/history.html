@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Transaction History</h2>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>ID</th>
+      {% if admin_view %}
+        <th>User</th><th>Book Title</th><th>Action</th><th>Date</th><th>Borrower Name</th><th>Phone</th>
+      {% else %}
+        <th>Book Title</th><th>Action</th><th>Date</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for t in transactions %}
+    <tr>
+      {% if admin_view %}
+        <td>{{ t.id }}</td>
+        <td>{{ t.username }}</td>
+        <td>{{ t.title }}</td>
+        <td>{{ t.type.capitalize() }}</td>
+        <td>{{ t.date }}</td>
+        <td>{{ t.borrower_name or "-" }}</td>
+        <td>{{ t.phone or "-" }}</td>
+      {% else %}
+        <td>{{ t.id }}</td>
+        <td>{{ t.title }}</td>
+        <td>{{ t.type.capitalize() }}</td>
+        <td>{{ t.date }}</td>
+      {% endif %}
+    </tr>
+    {% else %}
+    <tr><td colspan="7" class="text-center">No transactions found.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<a href="{{ url_for('dashboard') }}">
+  <button style="background-color:blue; color:black; padding:10px 20px; border:none; border-radius:5px; margin:5px;">
+    🏠 Home
+  </button>
+</a>
+{% endblock %}
